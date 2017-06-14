@@ -1,0 +1,35 @@
+version: '3'
+services:
+
+    web:
+        build: .
+        ports:
+        - "8000:8000"
+        depends_on:
+        - redis-sentinel
+
+    redis-master:
+        image: "redis:alpine"
+        volumes:
+        - ./conf/redis-master.conf:/data/redis-master.conf
+        command:
+            redis-server redis-master.conf
+
+    redis-slave:
+        image: "redis:alpine"
+        volumes:
+        - ./conf/redis-slave.conf:/data/redis-slave.conf
+        command:
+            redis-server redis-slave.conf
+
+    redis-sentinel:
+        image: "redis:alpine"
+        volumes:
+        - ./conf/redis-sentinel.conf:/data/redis-sentinel.conf
+        - ./conf/sentinel-notify.sh:/data/sentinel-notify.sh
+        command:
+            redis-sentinel redis-sentinel.conf
+
+networks:
+    default:
+        driver: bridge

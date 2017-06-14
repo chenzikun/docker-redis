@@ -1,0 +1,4 @@
+--index=https://pypi.douban.com/simple
+redis==2.10.5
+gunicorn==19.7.1
+Flask==0.12.2
